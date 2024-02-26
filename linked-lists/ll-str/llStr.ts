@@ -40,11 +40,27 @@ class LLStr {
   /** push(val): add new value to end of list. */
 
   push(val: string): void {
+    const newNode = new NodeStr(val);
+
+    if (this.head === null){
+      this.head = newNode;
+    };
+
+    if (this.tail !== null){
+      this.tail.next = newNode;
+    }
+
+    this.tail = newNode;
   }
 
   /** unshift(val): add new value to start of list. */
 
   unshift(val: string): void {
+    const newNode = new NodeStr(val);
+    const oldHead = this.head
+
+    this.head = newNode
+    this.head.next = oldHead
   }
 
   /** pop(): return & remove last item.
@@ -53,7 +69,21 @@ class LLStr {
    **/
 
   pop(): string {
-    return "x";
+
+    if (this.head === null){
+      throw IndexError;
+    }
+
+    let current = this.head;
+
+    while (current!== null){
+      if (current.next === this.tail){
+        const oldTail = current.next;
+        current.next = null;
+        return oldTail!.val;
+      }
+      current = current.next;
+    };
   }
 
   /** shift(): return & remove first item.
@@ -62,6 +92,8 @@ class LLStr {
    **/
 
   shift(): string {
+    if this.head === null
+    this.head = this.head!.next
     return "x";
   }
 
