@@ -51,6 +51,7 @@ class LLStr {
     }
 
     this.tail = newNode;
+    this.length++;
   }
 
   /** unshift(val): add new value to start of list. */
@@ -59,8 +60,13 @@ class LLStr {
     const newNode = new NodeStr(val);
     const oldHead = this.head;
 
+    if (oldHead === null) {
+      this.tail = newNode;
+    }
+
     this.head = newNode;
     this.head.next = oldHead;
+    this.length++;
   }
 
   /** pop(): return & remove last item.
@@ -85,6 +91,7 @@ class LLStr {
     const newTail = current;
     newTail.next = null;
     this.tail = newTail;
+    this.length--;
 
     return oldTail!.val;
   }
@@ -102,6 +109,7 @@ class LLStr {
 
     const oldHead = this.head;
     this.head = oldHead.next;
+    this.length--;
 
     return oldHead.val;
   }
@@ -125,7 +133,7 @@ class LLStr {
     }
 
     if (current === null) {
-      throw new IndexError("Index not found")
+      throw new IndexError("Index not found");
     }
     return current.val;
   }
@@ -149,7 +157,7 @@ class LLStr {
     }
 
     if (current === null) {
-      throw new IndexError("Index not found")
+      throw new IndexError("Index not found");
     }
 
     current.val = val;
@@ -165,7 +173,7 @@ class LLStr {
 
     let i = 0;
     while (current !== null) {
-      if (i === (idx-1)) {
+      if (i === (idx - 1)) {
         break;
       }
       i++;
@@ -173,11 +181,12 @@ class LLStr {
     }
 
     if (current === null) {
-      throw new IndexError("Index not found")
+      throw new IndexError("Index not found");
     }
 
-    const newNode = new NodeStr(val)
+    const newNode = new NodeStr(val);
     newNode.next = current.next;
+    this.length++;
 
     current.next = newNode;
   }
@@ -188,7 +197,28 @@ class LLStr {
    **/
 
   removeAt(idx: number): string {
-    return "x";
+    let current = this.head;
+
+    let i = 0;
+    while (current !== null) {
+      if (i === (idx - 1)) {
+        break;
+      }
+      i++;
+      current = current.next;
+    }
+    //Find index before, change the index before's next to the index after
+
+    if (current === null || current.next === null) {
+      throw new IndexError("Index not found");
+    }
+
+    const nodeToRemove = current.next;
+    const nodeAfter = nodeToRemove.next;
+    this.length--;
+
+    current.next = nodeAfter;
+    return nodeToRemove.val;
   }
 
   /** toArray (useful for tests!) */
