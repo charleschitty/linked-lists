@@ -216,9 +216,24 @@ class LLStr {
    **/
 
   removeAt(idx: number): string {
+
+    if (idx < 0 || idx >= this.length) {
+      throw new IndexError("Index not found");
+    }
+
     let current = this.head;
 
+    if (idx === 0){
+      this.head = current!.next
+      if (this.length === 1){
+        this.tail = current!.next
+      }
+      this.length--
+      return current!.val
+    }
+
     let i = 0;
+
     while (current !== null) {
       if (i === (idx - 1)) {
         break;
@@ -234,9 +249,13 @@ class LLStr {
 
     const nodeToRemove = current.next;
     const nodeAfter = nodeToRemove.next;
+    current.next = nodeAfter;
+    if (idx === this.length-1){
+      this.tail = current
+    }
+
     this.length--;
 
-    current.next = nodeAfter;
     return nodeToRemove.val;
   }
 
