@@ -179,78 +179,92 @@ class LLStr {
    **/
 
   insertAt(idx: number, val: string): void {
-    let current = this.head;
+    let current = this.head; //aNode
 
+    //handles edge cases
     if (idx > this.length) {
       throw new IndexError("Index not found");
     }
 
-    let i = 0;
-    while (current !== null && current.next !== null) {
-      if (i === (idx - 1)) {
-        break;
-      }
-      i++;
-      current = current.next;
-    }
-
     const newNode = new NodeStr(val);
-    newNode.next = current.next;
+
+    //handles inserting at start
     if (idx === 0) {
+      newNode.next = this.head;
       this.head = newNode;
     }
-    else if (idx === this.length) {
-      this.tail = newNode;
-    }
-    this.length++;
+    else {
+      let i = 0;
+      // we are trying to find the index before the insertion
+      // find current = node before insertion
+      // newNode.next = current.next
+      // current = x -- > y (current.next)
+      // newNode.next --> y
 
-    current.next = newNode;
-  }
-
-  /** removeAt(idx): return & remove item at idx,
-   *
-   * Throws IndexError if not found.
-   **/
-
-  removeAt(idx: number): string {
-    let current = this.head;
-
-    let i = 0;
-    while (current !== null) {
-      if (i === (idx - 1)) {
-        break;
+      //[single]
+      while (previous !== null) { //aNode
+        if (i === (idx - 1)) {
+          break;
+        }
+        i++;
+        previous = previous.next;
       }
-      i++;
-      current = current.next;
+      //we have the previous node
+      newNode.next = previous; //aNode
+      previous.next = newNode
+
+      if (idx === this.length) {
+        this.tail = newNode;
+      }
+
+      this.length++;
     }
-    //Find index before, change the index before's next to the index after
-
-    if (current === null || current.next === null) {
-      throw new IndexError("Index not found");
-    }
-
-    const nodeToRemove = current.next;
-    const nodeAfter = nodeToRemove.next;
-    this.length--;
-
-    current.next = nodeAfter;
-    return nodeToRemove.val;
   }
 
-  /** toArray (useful for tests!) */
+    /** removeAt(idx): return & remove item at idx,
+     *
+     * Throws IndexError if not found.
+     **/
 
-  toArray(): string[] {
-    const out = [];
-    let current = this.head;
+    removeAt(idx: number): string {
+      let current = this.head;
 
-    while (current) {
-      out.push(current.val);
-      current = current.next;
+      let i = 0;
+      while (current !== null) {
+        if (i === (idx - 1)) {
+          break;
+        }
+        i++;
+        current = current.next;
+      }
+      //Find index before, change the index before's next to the index after
+
+      if (current === null || current.next === null) {
+        throw new IndexError("Index not found");
+      }
+
+      const nodeToRemove = current.next;
+      const nodeAfter = nodeToRemove.next;
+      this.length--;
+
+      current.next = nodeAfter;
+      return nodeToRemove.val;
     }
 
-    return out;
+    /** toArray (useful for tests!) */
+
+    toArray(): string[] {
+      const out = [];
+      let current = this.head;
+
+      while (current) {
+        out.push(current.val);
+        current = current.next;
+      }
+
+      return out;
+    }
   }
-}
 
 
 export {
