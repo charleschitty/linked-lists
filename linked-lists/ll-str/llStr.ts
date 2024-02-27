@@ -82,7 +82,7 @@ class LLStr {
 
     let current = this.head;
 
-    while (current.next !== this.tail) {
+    while (current.next !== null && current.next !== this.tail) {
       current = current.next!;
     };
 
@@ -90,8 +90,14 @@ class LLStr {
 
     const newTail = current;
     newTail.next = null;
+
     this.tail = newTail;
     this.length--;
+
+    if (this.length === 0) {
+      this.head = null;
+      this.tail = null;
+    }
 
     return oldTail!.val;
   }
@@ -110,6 +116,10 @@ class LLStr {
     const oldHead = this.head;
     this.head = oldHead.next;
     this.length--;
+
+    if (this.length === 0) {
+      this.tail = null;
+    }
 
     return oldHead.val;
   }
@@ -171,8 +181,12 @@ class LLStr {
   insertAt(idx: number, val: string): void {
     let current = this.head;
 
+    if (idx > this.length) {
+      throw new IndexError("Index not found");
+    }
+
     let i = 0;
-    while (current !== null) {
+    while (current !== null && current.next !== null) {
       if (i === (idx - 1)) {
         break;
       }
@@ -180,12 +194,14 @@ class LLStr {
       current = current.next;
     }
 
-    if (current === null) {
-      throw new IndexError("Index not found");
-    }
-
     const newNode = new NodeStr(val);
     newNode.next = current.next;
+    if (idx === 0) {
+      this.head = newNode;
+    }
+    else if (idx === this.length) {
+      this.tail = newNode;
+    }
     this.length++;
 
     current.next = newNode;
